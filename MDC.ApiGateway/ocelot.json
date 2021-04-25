@@ -1,0 +1,75 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/Contribution",
+      "DownstreamScheme": "https",
+      "UpstreamPathTemplate": "/api/Contribution",
+      "ServiceName": "ContributionService",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "FileCacheOptions": { "TtlSeconds": 15 },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiSecurity",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "userType": "BUSINESSUSER"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/contributionsHub",
+      "DownstreamScheme": "wss",
+      "UpstreamPathTemplate": "/contributionsHub",
+      "ServiceName": "ContributionServiceHub",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
+      "FileCacheOptions": { "TtlSeconds": 15 }
+    },
+    {
+      "DownstreamPathTemplate": "/api/Validation",
+      "DownstreamScheme": "https",
+      "UpstreamPathTemplate": "/api/Validation",
+      "ServiceName": "ValidationService",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "FileCacheOptions": { "TtlSeconds": 15 },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiSecurity",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "userType": "BUSINESSUSER"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/validationHub",
+      "DownstreamScheme": "wss",
+      "UpstreamPathTemplate": "/validationHub",
+      "ServiceName": "ValidationServiceHub",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
+      "FileCacheOptions": { "TtlSeconds": 15 }
+    },
+    {
+      "DownstreamPathTemplate": "/api/Dashboard/{everything}",
+      "DownstreamScheme": "http",
+      "UpstreamPathTemplate": "/api/Dashboard/{everything}",
+      "ServiceName": "DashboardService",
+      "UpstreamHttpMethod": [ "Post" ],
+      "FileCacheOptions": { "TtlSeconds": 15 },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiSecurity",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "userType": "BUSINESSUSER"
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    "RequestIdKey": "OcRequestId",
+    "AdministrationPath": "/administration",
+    "UseServiceDiscovery": true,
+    "ServiceDiscoveryProvider": {
+      "Type": "Eureka",
+      "Host": "localhost",
+      "Port": "8761"
+    }
+  }
+}

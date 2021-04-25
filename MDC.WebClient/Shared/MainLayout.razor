@@ -1,0 +1,68 @@
+﻿@using MDC.WebClient.Data
+@using MDC.ContributionService.Common
+@inherits LayoutComponentBase
+@inject State _state;
+@inject AuthService _authService;
+
+<div class="sidebar">
+    <NavMenu/>
+</div>
+
+<div class="main">
+    <div class="top-row px-4">
+
+        @if (string.IsNullOrEmpty(_state.AuthToken))
+        {
+            <div class="row">
+                @if (!string.IsNullOrEmpty(Error))
+                {
+                    <label style="color: red; margin: 10px">@Error</label>
+                }
+
+                <input style="margin: 2px; width: 150px;" @bind="User" placeholder="User (user1)"/>
+                <input type="password" style="margin: 2px; width: 150px;" @bind="Password" placeholder="Password (pwd)"/>
+                <button class="btn btn-primary" @onclick="@Login">Login</button>
+            </div>
+        }
+        @if (!string.IsNullOrEmpty(_state.AuthToken))
+        {
+            <label style="color: dimgray; margin: 10px">Logged In as @_state.User</label>
+            <button class="btn btn-secondary" @onclick="@SignOut">Sign Out</button>
+        }
+
+    </div>
+
+    <div class="content px-4">
+        @Body
+    </div>
+</div>
+
+@code
+{
+    public string User { get; set; }
+    public string Password { get; set; }
+    public string Error { get; set; }
+
+    async Task Login()
+    {
+        if (string.IsNullOrEmpty(User) || string.IsNullOrEmpty(Password))
+        {
+            Error = "User/Pwd cannot be empty!";
+            return;
+        }
+
+        Error = await _authService.Authenticate(new AuthRequest {Login = User, Password = Password});
+        _state.User = User;
+
+        Error = await _authService.TestAuth();
+        StateHasChanged();
+    }
+
+    void SignOut()
+    {
+        _authService.SignOut();
+        User = null;
+        Password = null;
+
+    }
+}

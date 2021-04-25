@@ -1,0 +1,128 @@
+﻿@page "/"
+@using MDC.ContributionService.Common
+@using Microsoft.AspNetCore.SignalR.Client
+@inject Data.ContributionService _contributionService;
+@inject State _state;
+@inject IJSRuntime _jsRuntime;
+@inject AppSettings _appSettings;
+
+@if (_state.AuthToken != null)
+{
+
+    <div class="card shadow-lg p-2 col-lg-5 col-md-6 col-sm-12">
+    
+   
+        <div class="border border-light p-3">
+
+            <p class="h4 mb-4 text-center">FXQuote</p>
+            <p class="h6 mb-4 text-center">Tenor: SP</p>
+
+            <label for="ticker">Ticker</label>
+            <input type="text" id="ticker" class="form-control" placeholder="e.g. EUR/USD" @bind="CcyPair">
+
+            <label for="ticker" class="mt-2">Bid</label>
+            <input type="number" id="bid" class="form-control" placeholder="0" @bind="Bid" step="0.0001">
+
+            <label for="ticker" class="mt-2">Ask</label>
+            <input type="number" id="ask" class="form-control" placeholder="0" @bind="Ask" step="0.0001">
+
+
+            <button class="btn btn-info my-4 btn-block" @onclick="OnSubmit">Process</button>
+
+           
+
+        </div>
+    </div>
+    <div class="card p-2">
+        <div style="background-color: black; font-size: 11px" class="m-1 p-2">
+            <p class="h6 mb-4 text-center" style="color: lightgray">Console</p>
+
+            @foreach (var msg in LogMessages)
+            {
+                var style = "color:white; margin:0px;";
+
+                if (msg.Contains("Success", StringComparison.OrdinalIgnoreCase)) style = "color:green;margin:0px;";
+                if (msg.Contains("Fail", StringComparison.OrdinalIgnoreCase)) style = "color:red;margin:0px;";
+
+                <p style="@style"> @msg</p>
+            }
+        </div>
+    </div>
+    }
+else
+{
+    <div class="alert alert-primary">
+        Please sign in to continue
+    </div>
+}
+
+
+@code
+{
+    private HubConnection contributionHub, validationHub;
+    private object _lock = new object();
+    public string CcyPair { get; set; }
+    public double Bid { get; set; }
+    public double Ask { get; set; }
+
+    public List<string> LogMessages { get; set; } = new List<string>();
+
+    protected override void OnInitialized()
+    {
+
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (contributionHub == null && _state.AuthToken != null)
+        {
+            contributionHub = new HubConnectionBuilder()
+            .WithUrl("https://localhost:4099/contributionsHub").Build();
+            contributionHub.On<string, string>("broadcastMessage", ReceiveBroadcast);
+            await contributionHub.StartAsync();
+        }
+        if (validationHub == null && _state.AuthToken != null)
+        {
+            validationHub = new HubConnectionBuilder()
+            .WithUrl("https://localhost:3099/validationHub").Build();
+            validationHub.On<string, string>("broadcastMessage", ReceiveBroadcast);
+            await validationHub.StartAsync();
+        }
+        _state.StateChanged += (() => InvokeAsync(StateHasChanged));
+    }
+
+    private async Task ReceiveBroadcast(string user, string message)
+    {
+        await InvokeAsync(() =>
+        {
+            if (message != null)
+            {
+                lock (_lock)
+                {
+                    LogMessages.Add(message);     
+                }
+            }
+            StateHasChanged();
+        });
+    }
+
+    async Task OnSubmit()
+    {
+        var request = new ContributionRequest()
+        {
+            ContributionType = "FxQuote",
+            RequestFields = new List<RequestField>
+            {
+                new RequestField{Type = FieldType.StringField, FieldName = "Ticker", Value = CcyPair},
+                new RequestField{Type = FieldType.FloatField, FieldName = "Bid", Value = Bid},
+                new RequestField{Type = FieldType.StringField, FieldName = "Ask", Value = Ask},
+            }
+        };
+
+        var result = await _contributionService.Contribute(request);
+
+        LogMessages.Add(result);
+        LogMessages.Add("Validation successful!");
+        LogMessages.Add("Contribution sent successfully!");
+    }
+}
