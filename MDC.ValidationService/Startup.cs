@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MDC.ContributionService.Common;
 using MDC.ValidationService.Hubs;
 using MDC.ValidationService.Messaging.RabbitMq;
+using MDC.ValidationService.Validation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -90,6 +91,7 @@ namespace MDC.ValidationService
             services.AddSignalR();
 
             services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
+            services.AddSingleton<ValidatorFactory>();
 
             services.AddRabbitListeners();
         }
