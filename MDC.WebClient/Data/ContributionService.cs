@@ -30,5 +30,11 @@ namespace MDC.WebClient.Data
             return !result.IsSuccessStatusCode ? result.ReasonPhrase : String.Empty;
         }
 
+        public async Task<string> Request(string quoteType, string id)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _state.AuthToken);
+            var result = await _httpClient.GetAsync($"api/Contribution/{quoteType}/{id}");
+            return !result.IsSuccessStatusCode ? result.ReasonPhrase : String.Empty;
+        }
     }
 }

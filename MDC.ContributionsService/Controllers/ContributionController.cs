@@ -36,11 +36,14 @@ namespace MDC.ContributionsService.Controllers
             return Ok();
         }
 
-        [HttpGet]
+        [HttpGet("{contributionType}/{requestId}")]
         [AllowAnonymous]
-        public IActionResult GetValues()
+        public async Task<IActionResult> Contribute(string contributionType, string requestId)
         {
-            return Ok("Success");
+            var request = new ContributionGetRequest() {RequestId = requestId, ContributionType = contributionType};
+            _logger.LogInformation($"New request: {request.ContributionType}");
+            await _bus.Send(request);
+            return Ok();
         }
     }
 }

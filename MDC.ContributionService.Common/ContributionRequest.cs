@@ -14,4 +14,11 @@ namespace MDC.ContributionService.Common
             return $"{ContributionType} {string.Join(",", RequestFields)}";
         }
     }
+
+    public class ContributionGetRequest : IRequest
+    {
+        public string RequestId { get; set; }
+        public string ContributionType { get; set; } //e.g. FxQuote
+
+    }
 }

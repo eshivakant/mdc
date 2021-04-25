@@ -16,6 +16,21 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/Contribution/{everything}",
+      "DownstreamScheme": "https",
+      "UpstreamPathTemplate": "/api/Contribution/{everything}",
+      "ServiceName": "ContributionService",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "FileCacheOptions": { "TtlSeconds": 15 },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiSecurity",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "userType": "BUSINESSUSER"
+      }
+    },
+    {
       "DownstreamPathTemplate": "/contributionsHub",
       "DownstreamScheme": "wss",
       "UpstreamPathTemplate": "/contributionsHub",

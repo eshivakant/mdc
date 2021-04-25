@@ -91,7 +91,8 @@ namespace MDC.ContributionsService
             services.AddAuthorization(_ => { });
           
             services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
-            //services.Add<IValidationService, ValidationService>(); //this can be swapped
+            services.AddSingleton<IContributionsRepo, ContributionsRepo>();
+            //services.Save<IValidationService, ValidationService>(); //this can be swapped
             services.AddHttpClient<IValidationService, ValidationService>(client =>
             {
                 client.BaseAddress = new Uri(appSettings.GatewayAddress);

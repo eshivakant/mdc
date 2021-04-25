@@ -1,9 +1,108 @@
-﻿@page "/fetchdata"
+﻿@page "/contributions"
 
-@using MDC.WebClient.Data
-@inject AuthService _authService
+@using MDC.ContributionService.Common
+@using Microsoft.AspNetCore.SignalR.Client
+@inject Data.ContributionService _contributionService;
+@inject State _state;
+@inject IJSRuntime _jsRuntime;
+@inject AppSettings _appSettings;
+
+@if (_state.AuthToken != null)
+{
+    <button class="btn btn-primary" @onclick="@OnSubmit">Get Contributions</button>
+    <div class="card p-2">
+        @if (ContributionRequests == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else if (!ContributionRequests.Any())
+        {
+            <p><em>No contributions..</em></p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Contribution Type</th>
+                    @foreach (var col in ContributionRequests.First().RequestFields)
+                    {
+                        <th>@col.FieldName</th>
+                    }
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in ContributionRequests)
+                {
+                    <tr>
+                        
+                        <td>@item.ContributionType</td>
+                        @foreach (var col in @item.RequestFields)
+                        {
+                            <td>@col.Value</td>
+                        }
+                        
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-primary">
+        Please sign in to continue
+    </div>
+}
 
 
-@code {
-    
+@code
+{
+    private HubConnection contributionHub;
+    private object _lock = new object();
+    private string _guid = Guid.NewGuid().ToString();
+
+
+    public List<ContributionRequest> ContributionRequests { get; set; } = new List<ContributionRequest>();
+
+    protected override void OnInitialized()
+    {
+
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (contributionHub == null && _state.AuthToken != null)
+        {
+            contributionHub = new HubConnectionBuilder()
+            .WithUrl("https://localhost:4099/contributionsHub").Build();
+            contributionHub.On<string, List<ContributionRequest>>("broadcastContributions", ReceiveBroadcast);
+            await contributionHub.StartAsync();
+        }
+
+        _state.StateChanged += (() => InvokeAsync(StateHasChanged));
+    }
+
+    private async Task ReceiveBroadcast(string user, List<ContributionRequest> message)
+    {
+        await InvokeAsync(() =>
+        {
+            if (message != null)
+            {
+                lock (_lock)
+                {
+                    ContributionRequests.AddRange(message);
+                }
+            }
+            StateHasChanged();
+        });
+    }
+
+    async Task OnSubmit()
+    {
+        _guid = Guid.NewGuid().ToString();
+        await _contributionService.Request("FxQuote", _guid);
+
+    }
 }
