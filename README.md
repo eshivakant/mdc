@@ -1,5 +1,5 @@
 # mdc
 Assignment
 
-![Alt text](/doc/web0.png?raw=true "Title")
+![Alt text](mdc/doc/web0.png?raw=true "Title")
 
