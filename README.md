@@ -45,10 +45,8 @@ My docker setup is windows 10 docker desktop with a WSL backend (Ubuntu 20.04 LT
 Prerequisite: 
 > See previous step
 
-On windows command prompt execute the following:
-> run mdc/BuildAndStartAll.cmd script to restore nugets, build all projects and start them from single file
-
-todo: Fix Docker Launchsettings
+On windows command prompt do the following:
+> run BuildAndStartAll.cmd script from root folder to restore nugets, build all projects and start them from single file
 
 Hard coded user credentials for testing the GUI/API
 > Login: user1
