@@ -12,7 +12,7 @@ namespace MDC.ValidationService.Validation
             if (ticker?.Value == null)
                 return "Missing ticker";
 
-            if (!Regex.IsMatch(ticker.Value.ToString(), "([A-Z]{3})/+([A-Z]{3})"))
+            if (!Regex.IsMatch(ticker.Value.ToString() ?? string.Empty, "([A-Z]{3})/+([A-Z]{3})"))
                 return "Incorrect ticket format";
 
             var bid = request.RequestFields.FirstOrDefault(r => r.FieldName == "Bid");
@@ -27,7 +27,7 @@ namespace MDC.ValidationService.Validation
             if (ask == null)
                 return "Ask price not found";
 
-            var ap = bid.Value as double?;
+            var ap = ask.Value as double?;
             if (ap == null || ap < 0)
                 return "Invalid ask price";
 
