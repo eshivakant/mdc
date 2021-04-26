@@ -9,7 +9,7 @@
 
 @if (_state.AuthToken != null)
 {
-    <button class="btn btn-primary" @onclick="@OnSubmit">Get Contributions</button>
+    <button class="btn btn-primary m-2" @onclick="@OnSubmit">Get Contributions</button>
     <div class="card p-2">
         @if (ContributionRequests == null)
         {
@@ -69,6 +69,12 @@ else
     protected override void OnInitialized()
     {
 
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(firstRender)
+            _state.StateChanged += (() => InvokeAsync(StateHasChanged));
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

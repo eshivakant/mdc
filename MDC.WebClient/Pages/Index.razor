@@ -88,7 +88,9 @@ else
             validationHub.On<string, string>("broadcastMessage", ReceiveBroadcast);
             await validationHub.StartAsync();
         }
-        _state.StateChanged += (() => InvokeAsync(StateHasChanged));
+
+        if(firstRender)
+            _state.StateChanged += (() => InvokeAsync(StateHasChanged));
     }
 
     private async Task ReceiveBroadcast(string user, string message)
@@ -122,6 +124,5 @@ else
         var result = await _contributionService.Contribute(request);
 
         LogMessages.Add(result);
-        LogMessages.Add("Contribution sent successfully!");
     }
 }

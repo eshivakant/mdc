@@ -58,6 +58,12 @@
         StateHasChanged();
     }
 
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(firstRender)
+            _state.StateChanged += (() => InvokeAsync(StateHasChanged));
+    }
+
     void SignOut()
     {
         _authService.SignOut();

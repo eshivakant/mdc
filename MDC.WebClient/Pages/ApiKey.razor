@@ -1,0 +1,77 @@
+﻿@page "/apikey"
+@using MDC.WebClient.Data
+@using MDC.ContributionService.Common
+@inject AuthService _authService;
+@inject State _state;
+@inject IJSRuntime _jsRuntime;
+@inject AppSettings _appSettings;
+
+@if (_state.AuthToken != null)
+{
+    <div class="card p-2">
+        @if (ApiKeyText == null)
+        {
+            @if (!ShowLogin)
+            {
+                <button class="btn btn-secondary m-2" @onclick="@OnSubmit">Generate API Key</button>
+            }
+            else
+            {
+                <div class="row">
+                    @if (!string.IsNullOrEmpty(Error))
+                    {
+                        <label style="color: red; margin: 10px">@Error</label>
+                    }
+
+                    <input style="margin: 2px; width: 150px;" @bind="User" placeholder="User (user1)"/>
+                    <input type="password" style="margin: 2px; width: 150px;" @bind="Password" placeholder="Password (pwd)"/>
+                    <button class="btn btn-primary" @onclick="@Generate">Generate new API key</button>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="card shadow m-2 p-2">
+                <em>@ApiKeyText</em>
+            </p>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-primary">
+        Please sign in to continue
+    </div>
+}
+
+
+@code
+{
+    public string ApiKeyText { get; set; }
+
+    public string User { get; set; }
+    public string Password { get; set; }
+
+    public bool ShowLogin { get; set; }
+
+    public string Error { get; set; }
+
+    void OnSubmit()
+    {
+        ShowLogin = true;
+        StateHasChanged();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(firstRender)
+            _state.StateChanged += (() => InvokeAsync(StateHasChanged));
+    }
+
+    async Task Generate()
+    {
+        Error = await _authService.Authenticate(new AuthRequest {Login = User, Password = Password});
+        if(string.IsNullOrEmpty(Error)) ApiKeyText = _state.AuthToken;
+        StateHasChanged();
+    }
+}
