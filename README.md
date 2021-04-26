@@ -5,7 +5,7 @@
 #### Since the project is an API gateway, it must have a solid architecture. Our objectives will be:
 * Robust loosely coupled architecture
 * Service cataloging and discovery
-* Low API latency - no blocking service calls. Every response comes over on a real time websocket connection and intra service communication should be done on RabbitMq message bus asynchronously.
+* Low API latency - no blocking service calls. Every response should come over on a real time websocket connection and intra service communication should be done on RabbitMq message bus asynchronously.
 * Unified Authentication and Authorization across all services using JWT tokens
 * Ability to generate auth tokens from the web GUI
 
@@ -27,7 +27,7 @@
 ## More to do
 * Expose metrics endpoints and plug in Grafana, Prometheus
 * Finish Rabbit MQ integration ( was not strictly required for given functionality - fell short of time)
-= Use gRPC for ultra low latency
+* Use gRPC for ultra low latency
 * Hook in Swagger
 * Dockerize the setup / Create Helm chart for Kubernetes
 * Secrets management
