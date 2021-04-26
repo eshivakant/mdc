@@ -37,6 +37,7 @@
 #### Start Eureka
 For starting all services manually, please ensure to run Euerka using following docker command first:
 > docker run --publish 8761:8761 steeltoeoss/eureka-server
+My docker setup is windows 10 docker desktop with a WSL backend (Ubuntu 20.04 LTS distro), but that should not make any difference - any docker setup will work as long as port mappings are not changed in the command above.
 
 #### Build and Start
 run mdc/BuildAndStartAll.cmd script to restore nugets, build all projects and start them from single file
@@ -67,6 +68,7 @@ Real time messages from all services are received by the GUI. See validation mes
 
 ## Fetch Contributions
 More work need to be done here - e.g. querying etc
+Also, contributions are stored in memory - should persist to a durable medium. Some decisions to be made based on retrieval pattern, retention policies etc. I have a feeling that time series databases - TimeScaleDB on PostgressSQL will be a good fit.
 ![Screenshot](doc/web2.PNG)
 
 ## API Key generation for other clients
