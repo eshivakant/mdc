@@ -32,11 +32,16 @@
 * Dockerize the setup / Create Helm chart for Kubernetes
 * Secrets management
 
-## Starting 
+## Buildind and Starting 
+
+#### Start Eureka
 For starting all services manually, please ensure to run Euerka using following docker command first:
 > docker run --publish 8761:8761 steeltoeoss/eureka-server
 
-After starting Eureka, start all services. Docker Launch configs are not ready yet, so please use project launch config to launch.
+#### Build and Start
+run mdc/BuildAndStartAll.cmd script to restore nugets, build all projects and start them from single file
+
+todo: Fix Docker Launchsettings
 
 Hard coded user credentials for testing the GUI/API
 > Login: user1
