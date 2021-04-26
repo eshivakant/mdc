@@ -28,6 +28,7 @@
 * Finish Rabbit MQ integration ( was not strictly required for given functionality - fell short of time)
 = Use gRPC for ultra low latency
 * Hook in Swagger
+* Dockerize the setup / Create Helm chart for Kubernetes
 
 ## Starting 
 For starting all services manually, please ensure to run Euerka using following docker command first:
