@@ -23,6 +23,12 @@
 
 ![Screenshot](doc/Architecture.PNG)
 
+## More to do
+* Expose metrics endpoints and plug in Grafana, Prometheus
+* Finish Rabbit MQ integration ( was not strictly required for given functionality - fell short of time)
+= Use gRPC for ultra low latency
+* Hook in Swagger
+
 ## Starting 
 For starting all services manually, please ensure to run Euerka using following docker command first:
 > docker run --publish 8761:8761 steeltoeoss/eureka-server![image](https://user-images.githubusercontent.com/10363700/116032544-d02e6880-a657-11eb-97d0-ab61663c1c62.png)
