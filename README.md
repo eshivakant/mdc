@@ -18,6 +18,7 @@
   * Process contributions
   * Retrieve contributions
   * Generate API Key that can be used bu other clients to talk to the API Gateway
+* Non-blocking architecture based on CQRS pattern. Clients send commands and have open subscriptions over websocket to receive updates.
 
 ## Architecture
 
