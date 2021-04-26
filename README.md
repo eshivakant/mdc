@@ -5,7 +5,7 @@
 #### Since the project is an API gateway, it must have a solid architecture. Our objectives will be:
 * Robust loosely coupled architecture
 * Service cataloging and discovery
-* Low API latency - no blocking service calls. Every response comes over on a real time websocket connection and intra service communication should be done on RabbitMq message bus asynchronously.
+* Low API latency - no blocking service calls. Every response should come over on a real time websocket connection and intra service communication should be done on RabbitMq message bus asynchronously.
 * Unified Authentication and Authorization across all services using JWT tokens
 * Ability to generate auth tokens from the web GUI
 
@@ -18,12 +18,30 @@
   * Process contributions
   * Retrieve contributions
   * Generate API Key that can be used bu other clients to talk to the API Gateway
+* Non-blocking architecture based on CQRS pattern. Clients send commands and have open subscriptions over websocket to receive updates.
+
+## Architecture
+
+![Screenshot](doc/Architecture.PNG)
+
+## More to do
+* Expose metrics endpoints and plug in Grafana, Prometheus
+* Finish Rabbit MQ integration ( was not strictly required for given functionality - fell short of time)
+* Use gRPC for ultra low latency
+* Hook in Swagger
+* Dockerize the setup / Create Helm chart for Kubernetes
+* Secrets management
 
 ## Starting 
 For starting all services manually, please ensure to run Euerka using following docker command first:
-> docker run --publish 8761:8761 steeltoeoss/eureka-server![image](https://user-images.githubusercontent.com/10363700/116032544-d02e6880-a657-11eb-97d0-ab61663c1c62.png)
+> docker run --publish 8761:8761 steeltoeoss/eureka-server
 
 After starting Eureka, start all services. Docker Launch configs are not ready yet, so please use project launch config to launch.
+
+Hard coded user credentials for testing the GUI/API
+> Login: user1
+> Password: pwd
+
 
 ### Services
 ![Screenshot](doc/services.PNG)
