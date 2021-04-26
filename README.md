@@ -1,6 +1,14 @@
 # Market Data Contribution API Gateway (mdc)
 ### A microservices based .net core API
 
+## Objectives:
+#### Since the project is an API gateway, it must have a solid architecture. Our objectives will be:
+* Robust loosely coupled architecture
+* Service cataloging and discovery
+* Low API latency - no blocking service calls. Every response comes over on a real time websocket connection and intra service communication should be done on RabbitMq message bus asynchronously.
+* Unified Authentication and Authorization across all services using JWT tokens
+* Ability to generate auth tokens from the web GUI
+
 ## Highlights
 * Ocelot for API Gateway
 * Spring Euereka for service discovery
@@ -20,7 +28,11 @@ After starting Eureka, start all services. Docker Launch configs are not ready y
 ### Services
 ![Screenshot](doc/services.PNG)
 
+## Gateway
+Ocelot is used for aggregating services into a gateway https://ocelot.readthedocs.io/en/latest/index.html
+
 ## Service Discovery
+Spring boot Eureka is used for service discovery https://spring.io/guides/gs/service-registration-and-discovery/
 ![Screenshot](doc/servicediscovery.PNG)
 
 ## Authenticate in GUI
