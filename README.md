@@ -53,6 +53,12 @@ Hard coded user credentials for testing the GUI/API
 > Login: user1
 > Password: pwd
 
+## Test
+Test framework - nUnit
+Run all tests in visual studio
+
+![Screenshot](doc/Tests.PNG)
+
 
 ### Services
 ![Screenshot](doc/services.PNG)
