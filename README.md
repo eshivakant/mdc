@@ -30,12 +30,18 @@
 = Use gRPC for ultra low latency
 * Hook in Swagger
 * Dockerize the setup / Create Helm chart for Kubernetes
+* Secrets management
 
 ## Starting 
 For starting all services manually, please ensure to run Euerka using following docker command first:
 > docker run --publish 8761:8761 steeltoeoss/eureka-server![image](https://user-images.githubusercontent.com/10363700/116032544-d02e6880-a657-11eb-97d0-ab61663c1c62.png)
 
 After starting Eureka, start all services. Docker Launch configs are not ready yet, so please use project launch config to launch.
+
+Hard coded user credentials for testing the GUI/API
+> Login: user1
+> Password: pwd
+
 
 ### Services
 ![Screenshot](doc/services.PNG)
