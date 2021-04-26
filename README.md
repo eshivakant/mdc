@@ -38,6 +38,7 @@
 
 For starting all services manually, please ensure to run Euerka using following docker command first:
 > docker run --publish 8761:8761 steeltoeoss/eureka-server
+
 My docker setup is windows 10 docker desktop with a WSL backend (Ubuntu 20.04 LTS distro), but that should not make any difference - any docker setup will work as long as port mappings are not changed in the command above.
 
 #### Build and Start
